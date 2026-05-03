@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0d10" />
+    <title>卢浮宫精选藏品讲解</title>
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div class="topbar__title">
+          <div class="topbar__h1">卢浮宫精选藏品讲解</div>
+          <div class="topbar__sub" id="topSub">离线可用 · 输入访问码后进入</div>
+        </div>
+        <button class="btn btn--ghost" id="btnInstallHelp" type="button">离线说明</button>
+      </header>
+
+      <main class="main">
+        <section class="view" data-view="browse">
+          <div class="panel">
+            <div class="field">
+              <label class="label" for="searchInput">检索</label>
+              <input
+                id="searchInput"
+                class="input"
+                type="search"
+                placeholder="输入藏品名 / 馆名 / 楼层 / 展厅号（例如：蒙娜丽莎 / Denon / 1 / 711）"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="filters">
+              <div class="field">
+                <label class="label" for="wingSelect">馆</label>
+                <select id="wingSelect" class="select"></select>
+              </div>
+              <div class="field">
+                <label class="label" for="floorSelect">楼层</label>
+                <select id="floorSelect" class="select"></select>
+              </div>
+              <div class="field">
+                <label class="label" for="roomSelect">展厅</label>
+                <select id="roomSelect" class="select"></select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="muted" id="countText">加载中…</div>
+              <button class="btn btn--primary" id="btnCacheAllAudio" type="button">一键缓存全部音频</button>
+            </div>
+          </div>
+
+          <div class="grid" id="cards"></div>
+        </section>
+
+        <section class="view hidden" data-view="downloads">
+          <div class="panel">
+            <div class="row row--wrap">
+              <button class="btn" id="btnSelectAll" type="button">全选</button>
+              <button class="btn" id="btnSelectNone" type="button">全不选</button>
+              <button class="btn btn--primary" id="btnCacheSelected" type="button">缓存选中音频</button>
+              <button class="btn btn--ghost" id="btnClearCache" type="button">清理缓存</button>
+            </div>
+
+            <div class="checks">
+              <label class="check">
+                <input type="checkbox" id="optIncludeImages" />
+                <span>同时缓存图片（更耗空间）</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" id="optIncludeMaps" checked />
+                <span>同时缓存卢浮宫地图</span>
+              </label>
+            </div>
+
+            <div class="progress">
+              <div class="progress__bar" id="progressBar"></div>
+            </div>
+            <div class="muted" id="progressText">尚未开始缓存</div>
+          </div>
+
+          <div class="list" id="downloadList"></div>
+        </section>
+
+        <section class="view hidden" data-view="maps">
+          <div class="panel">
+            <div class="row row--wrap" id="mapTabs"></div>
+            <div class="muted">提示：点击地图可放大查看。</div>
+          </div>
+          <div class="mapWrap">
+            <img id="mapImage" class="mapImage" alt="卢浮宫地图" />
+          </div>
+        </section>
+
+        <section class="view hidden" data-view="about">
+          <div class="panel">
+            <div class="about">
+              <div class="about__title">使用说明</div>
+              <ul class="about__list">
+                <li>先进入“下载/缓存”，缓存所需音频（卢浮宫网络不稳定时也能离线播放）。</li>
+                <li>
+                  “缓存”与“下载”的区别：缓存=把音频存到本页面的浏览器离线空间（不占用你相册，通常也不会出现在“下载”文件夹里）；下载=把音频作为文件保存到你的设备里（位置取决于手机/浏览器）。
+                </li>
+                <li>
+                  缓存后怎么用：回到“藏品”页（或点开某个藏品详情），直接点播放器播放即可；即使现场没网/网很差，也会优先使用已缓存的音频。
+                </li>
+                <li>不同手机可用离线空间不同，建议只缓存需要的内容；若空间不足可在“下载/缓存”里点“清理缓存”。</li>
+                <li>如果你觉得体验不错，辛苦打个五星好评；未来作者推出新商品时可享受3元满减。</li>
+              </ul>
+
+              <div class="about__title">作者联系方式</div>
+              <div class="about__wechat">微信：<span class="mono">lilacrina</span></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="nav">
+        <button class="nav__btn nav__btn--active" data-nav="browse" type="button">藏品</button>
+        <button class="nav__btn" data-nav="downloads" type="button">下载/缓存</button>
+        <button class="nav__btn" data-nav="maps" type="button">地图</button>
+        <button class="nav__btn" data-nav="about" type="button">关于</button>
+      </nav>
+    </div>
+
+    <div class="modal hidden" id="loginModal" role="dialog" aria-modal="true">
+      <div class="modal__card">
+        <div class="modal__title">请输入访问码</div>
+        <div class="modal__desc">输入 <span class="mono">louvre2026</span> 后进入页面。</div>
+        <input id="accessInput" class="input" type="password" placeholder="访问码" autocomplete="off" />
+        <div class="row">
+          <button id="btnAccess" class="btn btn--primary" type="button">进入</button>
+        </div>
+        <div class="error hidden" id="accessError">访问码不正确</div>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="itemModal" role="dialog" aria-modal="true">
+      <div class="modal__card modal__card--wide">
+        <div class="modal__top">
+          <div>
+            <div class="modal__title" id="itemTitle">—</div>
+            <div class="modal__desc" id="itemMeta">—</div>
+          </div>
+          <button class="btn btn--ghost" id="btnCloseItem" type="button">关闭</button>
+        </div>
+
+        <div class="item">
+          <div class="item__media">
+            <img id="itemImage" class="item__img" alt="藏品图片" loading="lazy" />
+          </div>
+          <div class="item__body">
+            <audio id="itemAudio" class="audio" controls preload="none"></audio>
+            <div class="row row--wrap">
+              <button class="btn btn--primary" id="btnCacheThis" type="button">缓存此音频</button>
+              <a class="btn" id="btnDownloadThis" download>下载音频</a>
+              <div class="pill" id="cacheStatusPill">未缓存</div>
+            </div>
+            <div class="muted" id="itemHint"></div>
+            <div class="transcript hidden" id="transcriptWrap">
+              <div class="transcript__title">文字稿</div>
+              <div class="transcript__body" id="transcriptBody"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="helpModal" role="dialog" aria-modal="true">
+      <div class="modal__card">
+        <div class="modal__title">离线使用说明</div>
+        <div class="modal__desc">
+          推荐在进入卢浮宫前先打开本页面，去“下载/缓存”缓存所需音频（可选连同图片/地图），等进度完成后即可离线播放。缓存是存到浏览器离线空间里，之后请回到本页面点击播放器播放（断网也能播）。
+        </div>
+        <div class="row">
+          <button class="btn btn--primary" id="btnHelpOk" type="button">知道了</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

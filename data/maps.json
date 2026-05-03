@@ -1,0 +1,18 @@
+[
+  {
+    "label": "0层",
+    "src": "./assets/maps/0%E5%8D%A2%E6%B5%AE%E5%AE%AB%E5%9C%B0%E5%9B%BE-0%E5%B1%82.png"
+  },
+  {
+    "label": "1层",
+    "src": "./assets/maps/0%E5%8D%A2%E6%B5%AE%E5%AE%AB%E5%9C%B0%E5%9B%BE-1%E5%B1%82.png"
+  },
+  {
+    "label": "2层",
+    "src": "./assets/maps/0%E5%8D%A2%E6%B5%AE%E5%AE%AB%E5%9C%B0%E5%9B%BE-2%E5%B1%82.png"
+  },
+  {
+    "label": "负一和负二层",
+    "src": "./assets/maps/0%E5%8D%A2%E6%B5%AE%E5%AE%AB%E5%9C%B0%E5%9B%BE-%E8%B4%9F%E4%B8%80%E5%92%8C%E8%B4%9F%E4%BA%8C%E5%B1%82.png"
+  }
+]
